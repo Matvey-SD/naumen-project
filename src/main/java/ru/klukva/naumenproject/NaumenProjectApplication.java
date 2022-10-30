@@ -2,12 +2,17 @@ package ru.klukva.naumenproject;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import ru.klukva.naumenproject.models.Account;
+import ru.klukva.naumenproject.models.BankUser;
+
+import java.util.ArrayList;
 
 @SpringBootApplication
 public class NaumenProjectApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(NaumenProjectApplication.class, args);
+        var user = new BankUser("Матвей", "Сарапулов", "Дмитриевич", "sarapulov.03@mail.ru", "+78885553535");
     }
 
 }
