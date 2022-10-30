@@ -13,7 +13,7 @@ public class BankTransaction implements Transaction {
     private final Account receiverAccount;
     private final Account giverAccount;
     private final ZonedDateTime transactionDateTime;
-    private final Double transactionAmount;
+    private final double transactionAmount;
 
     public BankTransaction(User receiver, User giver, Account receiverAccount, Account giverAccount, double transactionAmount){
         transactionDateTime = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Europe/Moscow"));
