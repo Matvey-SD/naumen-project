@@ -12,7 +12,6 @@ public class NaumenProjectApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(NaumenProjectApplication.class, args);
-        var user = new BankUser("Матвей", "Сарапулов", "Дмитриевич", "sarapulov.03@mail.ru", "+78885553535");
     }
 
 }
