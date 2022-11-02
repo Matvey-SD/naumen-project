@@ -25,6 +25,11 @@ public class BankUser implements User {
     private String email;
     private String phoneNumber;
 
+    private String hashPassword;
+
+    @Transient
+    private String password;
+
     @OneToMany(
             cascade = CascadeType.ALL,
             fetch = FetchType.EAGER,
