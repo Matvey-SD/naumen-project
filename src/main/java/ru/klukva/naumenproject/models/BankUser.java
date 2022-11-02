@@ -2,21 +2,35 @@ package ru.klukva.naumenproject.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
+@Setter
+@Entity
 public class BankUser implements User {
-    private long userID;
-    @Setter private String firstName;
-    @Setter private String lastName;
-    @Setter private String patronymic;
-    @Setter private String email;
-    @Setter private String phoneNumber;
-    private final List<Account> accounts = new ArrayList<>();
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String firstName;
+    private String lastName;
+    private String patronymic;
+    private String email;
+    private String phoneNumber;
+
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER,
+            mappedBy = "user"
+    )
+    private final List<BankAccount> accounts = new ArrayList<>();
 
     @Override
     public String getFullName() {

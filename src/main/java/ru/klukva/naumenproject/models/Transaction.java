@@ -3,10 +3,10 @@ package ru.klukva.naumenproject.models;
 import java.time.ZonedDateTime;
 
 public interface Transaction {
-    public User getReceiver();
-    public User getGiver();
-    public Account getReceiverAccount();
-    public Account getGiverAccount();
-    public ZonedDateTime getTransactionDateTime();
+    public Long getReceiverID();
+    public Long getGiverID();
+    public Long getReceiverAccountID();
+    public Long getGiverAccountID();
+    public String getTransactionDateTime();
     public double getTransactionAmount();
 }
