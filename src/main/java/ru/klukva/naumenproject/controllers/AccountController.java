@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.klukva.naumenproject.models.BankUser;
+import ru.klukva.naumenproject.repositories.UsersRepository;
 import ru.klukva.naumenproject.services.AccountRegistrationService;
 
 @Controller
@@ -14,6 +15,7 @@ public class AccountController {
 
     private final AccountRegistrationService accountRegistrationService;
 
+    private final UsersRepository usersRepository;
     @GetMapping("/account-registration")
     public String getAccountRegistration() {
         return "account_registration_page";
@@ -21,6 +23,7 @@ public class AccountController {
 
     @PostMapping("/account-registration")
     public String accountRegistration(@AuthenticationPrincipal BankUser user, String currencyCode) {
+        user = usersRepository.findBankUserById(user.getId());
         accountRegistrationService.createAccount(user, currencyCode);
         return "redirect:/home";
     }
