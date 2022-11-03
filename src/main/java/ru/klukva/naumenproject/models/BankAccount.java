@@ -1,6 +1,7 @@
 package ru.klukva.naumenproject.models;
 
 
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,8 +21,19 @@ public class BankAccount implements Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Double balance;
-    private String currencyName;
+
     private String currencyCode;
+
+
+    public BankAccount(Double balance, String currencyCode, BankUser user) {
+        this.balance = balance;
+        this.currencyCode = currencyCode;
+        this.user = user;
+    }
+
+    public BankAccount(String currencyCode) {
+        this.currencyCode = currencyCode;
+    }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

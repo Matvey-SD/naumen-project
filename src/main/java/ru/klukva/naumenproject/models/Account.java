@@ -5,7 +5,6 @@ import java.util.List;
 public interface Account {
     public Long getId();
     public Double getBalance();
-    public String getCurrencyName();
     public String getCurrencyCode();
     public List<BankTransaction> getTransactionsHistory();
 }

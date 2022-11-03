@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Home</title>
+</head>
+<body>
+<h3 th:text="'Имя: ' + ${user.getFirstName()}"></h3>
+<h3 th:text="'Фамилия: ' + ${user.getLastName()}"></h3>
+<h3 th:text="'Отчество: ' + ${user.getPatronymic()}"></h3>
+<h3 th:text="'Почта: ' + ${user.getEmail()}"></h3>
+<h3 th:text="'Телефон: ' + ${user.getPhoneNumber()}"></h3>
+<h3 th:each="account : ${user.getAccounts()}"></h3>
+<div th:if="${user.getAccounts().isEmpty()}">
+    <div>У вас не счетов!:(</div>
+</div>
+<div th:unless="${user.getAccounts().isEmpty()}">
+    <div th:each="account : ${user.getAccounts()}">
+        <div th:text="'Счет №' + ${account.getId()} + ' Баланс: ' + ${account.getBalance()} + ' ' + ${account.getCurrencyCode()}"></div>
+    </div>
+</div>
+<form action="/account-registration">
+    <button>Создать новый счет</button>
+</form>
+<form action="/home">
+    <button>Перезагрузить</button>
+</form>
+<form action="/logout">
+    <button>Выйти</button>
+</form>
+</body>
+</html>
