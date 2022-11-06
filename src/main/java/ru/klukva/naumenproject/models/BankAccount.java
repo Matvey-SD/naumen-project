@@ -21,7 +21,6 @@ public class BankAccount implements Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Double balance;
-
     private String currencyCode;
 
 

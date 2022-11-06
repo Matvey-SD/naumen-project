@@ -20,7 +20,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PasswordEncoder passwordEncoder;
 
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();

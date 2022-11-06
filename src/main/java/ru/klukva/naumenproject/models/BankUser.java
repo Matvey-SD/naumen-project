@@ -24,13 +24,11 @@ public class BankUser implements User, UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String firstName;
     private String lastName;
     private String patronymic;
     private String email;
     private String phoneNumber;
-
     private String hashPassword;
 
     @Transient
@@ -50,7 +48,7 @@ public class BankUser implements User, UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return Collections.singletonList(new SimpleGrantedAuthority("USER"));
     }
 
     @Override
@@ -61,7 +59,6 @@ public class BankUser implements User, UserDetails {
     public String getDecodePassword() {
         return password;
     }
-
 
     @Override
     public String getUsername() {
