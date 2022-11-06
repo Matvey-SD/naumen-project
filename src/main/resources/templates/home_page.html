@@ -8,9 +8,7 @@
     <title>Home</title>
 </head>
 <body>
-<h3 th:text="'Имя: ' + ${user.getFirstName()}"></h3>
-<h3 th:text="'Фамилия: ' + ${user.getLastName()}"></h3>
-<h3 th:text="'Отчество: ' + ${user.getPatronymic()}"></h3>
+<h3 th:text="'ФИО: ' + ${user.getFullName()}"></h3>
 <h3 th:text="'Почта: ' + ${user.getEmail()}"></h3>
 <h3 th:text="'Телефон: ' + ${user.getPhoneNumber()}"></h3>
 <h3 th:each="account : ${user.getAccounts()}"></h3>
