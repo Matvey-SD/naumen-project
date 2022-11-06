@@ -1,7 +1,5 @@
 package ru.klukva.naumenproject.models;
 
-import java.time.ZonedDateTime;
-
 public interface Transaction {
     public Long getReceiverID();
     public Long getGiverID();

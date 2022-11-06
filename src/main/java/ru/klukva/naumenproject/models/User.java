@@ -1,6 +1,5 @@
 package ru.klukva.naumenproject.models;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface User {
