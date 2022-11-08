@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Account Info</title>
+</head>
+<body>
+<h3 th:text="'НОМЕР СЧЕТА: ' + ${BankAccount.getId()}"></h3>
+<h3 th:text="'ВАЛЮТА СЧЕТА: ' + ${BankAccount.getCurrencyCode()}"></h3>
+<h3 th:text="'БАЛАНС: ' + ${BankAccount.getBalance()}"></h3>
+<form action="/home">
+    <button>Пополнить</button>
+</form>
+<form action="/home">
+    <button>Снять</button>
+</form>
+<form action="/home">
+    <button>Перевести</button>
+</form>
+<form action="/home">
+    <button>Назад</button>
+</form>
+</body>
+</html>

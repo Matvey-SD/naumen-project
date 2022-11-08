@@ -1,11 +1,17 @@
 package ru.klukva.naumenproject.controllers;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import ru.klukva.naumenproject.models.BankAccount;
 import ru.klukva.naumenproject.models.BankUser;
+import ru.klukva.naumenproject.repositories.AccountsRepository;
 import ru.klukva.naumenproject.repositories.UsersRepository;
 import ru.klukva.naumenproject.services.AccountRegistrationService;
 import ru.klukva.naumenproject.services.UserService;
@@ -16,6 +22,8 @@ public class AccountController {
 
     private final AccountRegistrationService accountRegistrationService;
     private final UserService userService;
+
+    private final AccountsRepository accountsRepository;
 
     @GetMapping("/account-registration")
     public String getAccountRegistration() {
@@ -30,6 +38,16 @@ public class AccountController {
         }
         accountRegistrationService.createAccount(user, currencyCode);
         return "redirect:/home";
+    }
+    @GetMapping("/account-info/{id}")
+    public String getAccountInfo(@PathVariable Long id, @AuthenticationPrincipal BankUser user, Model model) {
+        if (accountsRepository.existsBankAccountByIdAndUser(id, user)) {
+            BankAccount account = accountsRepository.getById(id);
+            model.addAttribute("BankAccount", account);
+            return "account_info_page";
+        }
+
+        return "failed_registration_page";
     }
 }
 
