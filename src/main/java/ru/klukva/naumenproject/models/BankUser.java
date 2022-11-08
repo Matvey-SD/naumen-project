@@ -5,11 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @AllArgsConstructor
@@ -28,9 +30,10 @@ public class BankUser implements User, UserDetails {
     private String email;
     private String phoneNumber;
     private String hashPassword;
-
     @Transient
     private String password;
+    @Transient
+    private boolean isSynchronized;
 
     @OneToMany(
             cascade = CascadeType.ALL,

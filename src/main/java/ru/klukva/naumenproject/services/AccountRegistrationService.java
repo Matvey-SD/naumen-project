@@ -17,6 +17,7 @@ public class AccountRegistrationService {
         var a = new BankAccount(0D, currency, user);
         user.getAccounts().add(a);
         usersRepository.save(user);
+        user.setSynchronized(false);
         return true;
     }
 

@@ -8,14 +8,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import ru.klukva.naumenproject.models.BankUser;
 import ru.klukva.naumenproject.repositories.UsersRepository;
 import ru.klukva.naumenproject.services.AccountRegistrationService;
+import ru.klukva.naumenproject.services.UserService;
 
 @Controller
 @AllArgsConstructor
 public class AccountController {
 
     private final AccountRegistrationService accountRegistrationService;
+    private final UserService userService;
 
-    private final UsersRepository usersRepository;
     @GetMapping("/account-registration")
     public String getAccountRegistration() {
         return "account_registration_page";
@@ -23,7 +24,10 @@ public class AccountController {
 
     @PostMapping("/account-registration")
     public String accountRegistration(@AuthenticationPrincipal BankUser user, String currencyCode) {
-        user = usersRepository.findBankUserById(user.getId());
+        if (!user.isSynchronized()) {
+            user = userService.getBankUserByID(user.getId());
+            user.setSynchronized(true);
+        }
         accountRegistrationService.createAccount(user, currencyCode);
         return "redirect:/home";
     }

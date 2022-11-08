@@ -24,6 +24,9 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
+    public BankUser getBankUserByID(Long id) {
+        return usersRepository.findBankUserById(id);
+    }
     public void addUser(BankUser user) {
         user.setHashPassword(passwordEncoder.encode(user.getDecodePassword()));
         usersRepository.save(user);
