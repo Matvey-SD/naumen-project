@@ -39,15 +39,16 @@ public class AccountController {
         accountRegistrationService.createAccount(user, currencyCode);
         return "redirect:/home";
     }
-    @GetMapping("/account-info/{id}")
-    public String getAccountInfo(@PathVariable Long id, @AuthenticationPrincipal BankUser user, Model model) {
+
+    @GetMapping("/account")
+    public String getAccountInfo(Long id, @AuthenticationPrincipal BankUser user, Model model) {
         if (accountsRepository.existsBankAccountByIdAndUser(id, user)) {
             BankAccount account = accountsRepository.getById(id);
             model.addAttribute("BankAccount", account);
             return "account_info_page";
         }
 
-        return "failed_registration_page";
+        return "redirect:/home";
     }
 }
 

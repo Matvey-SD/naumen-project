@@ -17,7 +17,7 @@
 </div>
 <div th:unless="${user.getAccounts().isEmpty()}">
     <div th:each="account : ${user.getAccounts()}">
-        <a th:href="'/account-info/' + ${account.getId()}"><div th:text="'Счет №' + ${account.getId()} + ' Баланс: ' + ${account.getBalance()} + ' ' + ${account.getCurrencyCode()}"></div></a>
+        <a th:href="'/account?id=' + ${account.getId()}"><div th:text="'Счет №' + ${account.getId()} + ' Баланс: ' + ${account.getBalance()} + ' ' + ${account.getCurrencyCode()}"></div></a>
     </div>
 </div>
 <form action="/account-registration">
