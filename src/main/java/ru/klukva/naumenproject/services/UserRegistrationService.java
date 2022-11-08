@@ -13,7 +13,7 @@ public class UserRegistrationService {
     private final UsersRepository usersRepository;
 
     public boolean registerUser(BankUser user) {
-        if (usersRepository.findBankUserByEmail(user.getEmail())  == null) {
+        if (!usersRepository.existsBankUserByEmail(user.getEmail())) {
             userService.addUser(user);
             return true;
         }
