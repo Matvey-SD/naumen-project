@@ -20,12 +20,8 @@ public class SingUpController {
 
     @PostMapping("/signUp")
     public String signUpUser(BankUser user) {
-
-        if (userRegistrationService.registerUser(user)) {
-            return "redirect:/home";
-        }
-
-        return "failed_registration_page";
+        boolean userIsRegistered = userRegistrationService.registerUser(user);
+        return userIsRegistered ? "redirect:/home": "failed_registration_page";
     }
 
 }

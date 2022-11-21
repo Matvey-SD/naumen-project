@@ -31,4 +31,9 @@ public class UserService implements UserDetailsService {
         user.setHashPassword(passwordEncoder.encode(user.getDecodePassword()));
         usersRepository.save(user);
     }
+
+    public void saveBankUser(BankUser user) {
+        usersRepository.save(user);
+    }
 }
+

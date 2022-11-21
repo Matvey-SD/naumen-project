@@ -19,12 +19,19 @@ public class BankTransaction implements Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private Long receiverID;
+
     private Long giverID;
+
     private Long receiverAccountID;
+
     private Long giverAccountID;
+
     private String transactionDateTime;
+
     private double transactionAmount;
+
 
     @ManyToMany
     @JoinTable(

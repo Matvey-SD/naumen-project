@@ -11,13 +11,16 @@ import ru.klukva.naumenproject.repositories.UsersRepository;
 @AllArgsConstructor
 public class AccountRegistrationService {
 
-    private final UsersRepository usersRepository;
+    private final UserService userService;
+
+    private final AccountService accountService;
 
     public boolean createAccount(BankUser user, String currency) {
-        var a = new BankAccount(0D, currency, user);
-        user.getAccounts().add(a);
-        usersRepository.save(user);
-        user.setSynchronized(false);
+        user = UserSynchronizingService.synchronize(user);
+        BankAccount account = accountService.getNewAccount(user,currency);
+        user.getAccounts().add(account);
+        userService.saveBankUser(user);
+        UserSynchronizingService.resynchronize(user);
         return true;
     }
 

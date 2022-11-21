@@ -7,14 +7,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import ru.klukva.naumenproject.models.BankUser;
-import ru.klukva.naumenproject.repositories.UsersRepository;
 import ru.klukva.naumenproject.services.UserService;
+import ru.klukva.naumenproject.services.UserSynchronizingService;
 
 @Controller
 @AllArgsConstructor
 public class MainController {
-
-    private final UserService userService;
 
     @GetMapping("/")
     public String getStart() {
@@ -23,10 +21,7 @@ public class MainController {
 
     @GetMapping("/home")
     public String getHome(@AuthenticationPrincipal BankUser user, Model model) {
-        if (!user.isSynchronized()) {
-            user = userService.getBankUserByID(user.getId());
-            user.setSynchronized(true);
-        }
+        user = UserSynchronizingService.synchronize(user);
         model.addAttribute("user", user);
         return "home_page";
     }
