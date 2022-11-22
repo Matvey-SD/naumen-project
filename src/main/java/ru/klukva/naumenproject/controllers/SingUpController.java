@@ -5,13 +5,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import ru.klukva.naumenproject.models.BankUser;
-import ru.klukva.naumenproject.services.UserRegistrationService;
+import ru.klukva.naumenproject.services.UserService;
 
 @Controller
 @AllArgsConstructor
 public class SingUpController {
 
-    private final UserRegistrationService userRegistrationService;
+    private final UserService userService;
 
     @GetMapping("/signUp")
     public String signUp() {
@@ -20,8 +20,8 @@ public class SingUpController {
 
     @PostMapping("/signUp")
     public String signUpUser(BankUser user) {
-        boolean userIsRegistered = userRegistrationService.registerUser(user);
-        return userIsRegistered ? "redirect:/home": "failed_registration_page";
+        boolean userIsRegistered = userService.registerUser(user);
+        return userIsRegistered ? "redirect:/home" : "failed_registration_page";
     }
 
 }

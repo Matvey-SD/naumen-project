@@ -6,5 +6,6 @@ import ru.klukva.naumenproject.models.BankUser;
 
 public interface AccountsRepository extends JpaRepository<BankAccount, Long> {
     boolean existsBankAccountByIdAndUser(Long id, BankUser user);
+    BankAccount findBankAccountById(Long id);
 
 }

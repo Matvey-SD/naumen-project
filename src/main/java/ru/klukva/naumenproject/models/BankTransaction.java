@@ -33,7 +33,7 @@ public class BankTransaction implements Transaction {
     private double transactionAmount;
 
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "account_transactions",
             joinColumns = {@JoinColumn(name = "transaction_id")},
@@ -41,18 +41,19 @@ public class BankTransaction implements Transaction {
     )
     private List<BankAccount> transactionParticipants = new ArrayList<>();
 
-    public BankTransaction(Long receiverID, Long giverID, Long receiverAccountID, Long giverAccountID, double transactionAmount) {
-        this.transactionDateTime = getTransactionDateTimeString();
+    public BankTransaction(Long receiverID,
+                           Long giverID,
+                           Long receiverAccountID,
+                           Long giverAccountID,
+                           String transactionDateTimeString,
+                           double transactionAmount) {
+
         this.receiverID = receiverID;
         this.giverID = giverID;
         this.receiverAccountID = receiverAccountID;
         this.giverAccountID = giverAccountID;
+        this.transactionDateTime = transactionDateTimeString;
         this.transactionAmount = transactionAmount;
-    }
 
-
-    public String getTransactionDateTimeString() {
-        ZonedDateTime transactionDateTime = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Europe/Moscow"));
-        return DateTimeFormatter.ofPattern("uuuu/MM/dd HH:mm:ss").format(transactionDateTime);
     }
 }

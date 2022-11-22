@@ -24,6 +24,15 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
+    public boolean registerUser(BankUser user) {
+        boolean userAlreadyExist = usersRepository.existsBankUserByEmail(user.getEmail());
+        if (!userAlreadyExist) {
+            addUser(user);
+            return true;
+        }
+        return false;
+    }
+
     public BankUser getBankUserByID(Long id) {
         return usersRepository.findBankUserById(id);
     }
@@ -34,6 +43,22 @@ public class UserService implements UserDetailsService {
 
     public void saveBankUser(BankUser user) {
         usersRepository.save(user);
+    }
+
+    public BankUser synchronize(BankUser user) {
+
+        if (user == null) throw new NullPointerException("User can't be null");
+
+        if (!user.isSynchronized()) {
+            user = getBankUserByID(user.getId());
+            user.setSynchronized(true);
+        }
+
+        return user;
+    }
+
+    public static void resynchronize(BankUser user) {
+        user.setSynchronized(false);
     }
 }
 

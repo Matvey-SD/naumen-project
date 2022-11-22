@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Transaction</title>
+</head>
+<body>
+<div th:if="${transactionType == 'add'}">
+    <h1 th:text="'Пополнение счета №' + ${BankAccount.getId()} "></h1>
+    <h2 th:text="'Текущий баланс ' + ${BankAccount.getBalance()} + ' ' + ${BankAccount.getCurrencyCode()}"></h2>
+    <h3>Введите сумму на которую хотите пополнить счет:</h3>
+    <form action="/transaction" method="post">
+        <div>
+            <input name="transactionAmount" placeholder="Введите сумму пополнения">
+        </div>
+        <div>
+            <input name="giverAccountID" th:value="${BankAccount.getId()}" type="hidden">
+        </div>
+        <div>
+            <input name="receiverAccountID" th:value="${BankAccount.getId()}" type="hidden">
+        </div>
+        <div>
+            <input name="transactionType" value="add" type="hidden">
+        </div>
+        <div>
+            <button type="submit">Пополнить</button>
+        </div>
+    </form>
+</div>
+<div th:if="${transactionType == 'transf'}">
+    <h1 th:text="'Перевод со счета счета №' + ${BankAccount.getId()} "></h1>
+    <h2 th:text="'Текущий баланс ' + ${BankAccount.getBalance()} + ' ' + ${BankAccount.getCurrencyCode()}"></h2>
+    <h3>Введите сумму, которую хотите перевести:</h3>
+
+    <form action="/transaction" method="post">
+        <div>
+            <input name="transactionAmount" placeholder="Введите сумму перевода">
+        </div>
+        <div>
+            <input name="giverAccountID" th:value="${BankAccount.getId()}" type="hidden">
+        </div>
+        <div>
+            <input name="receiverAccountID" placeholder="Введите номер счета получателя">
+        </div>
+        <div>
+            <input name="transactionType" value="transf" type="hidden">
+        </div>
+        <div>
+            <button type="submit">Перевести</button>
+        </div>
+    </form>
+</div>
+<div th:if="${transactionType == 'withd'}">
+    <h1 th:text="'Снятие со счета №' + ${BankAccount.getId()} "></h1>
+    <h2 th:text="'Текущий баланс ' + ${BankAccount.getBalance()} + ' ' + ${BankAccount.getCurrencyCode()}"></h2>
+    <h3>Введите сумму, которую хотите снять со счета:</h3>
+
+    <form action="/transaction" method="post">
+        <div>
+            <input name="transactionAmount" placeholder="Введите сумму снятия">
+        </div>
+        <div>
+            <input name="giverAccountID" th:value="${BankAccount.getId()}" type="hidden">
+        </div>
+        <div>
+            <input name="receiverAccountID" th:value="${BankAccount.getId()}" type="hidden">
+        </div>
+        <div>
+            <input name="transactionType" value="withd" type="hidden">
+        </div>
+        <div>
+            <button type="submit">Снять</button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

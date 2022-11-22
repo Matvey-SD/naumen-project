@@ -4,12 +4,14 @@ package ru.klukva.naumenproject.models;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -37,33 +39,12 @@ public class BankAccount implements Account {
     @JoinColumn(name = "user_id")
     private BankUser user;
 
-    @ManyToMany
+    @ManyToMany( fetch = FetchType.EAGER)
     @JoinTable(
             name = "account_transactions",
             joinColumns = {@JoinColumn(name = "account_id")},
             inverseJoinColumns = {@JoinColumn(name = "transaction_id")}
     )
     private final List<BankTransaction> transactionsHistory = new ArrayList<>();
-
-    public boolean tryIncreaseBalance(double value) {
-        double tempBalance = balance + value;
-
-        if (BALANCE_LIMIT < tempBalance) {
-            return false;
-        }
-        balance = tempBalance;
-        return true;
-    }
-
-    public boolean tryDecreaseBalance(double value) {
-        double tempBalance = balance - value;
-
-        if (tempBalance < 0) {
-            return false;
-        }
-
-        balance = tempBalance;
-        return true;
-    }
 
 }
