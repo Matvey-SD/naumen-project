@@ -14,10 +14,10 @@
     <h3>Введите сумму на которую хотите пополнить счет:</h3>
     <form action="/transaction" method="post">
         <div>
-            <input name="transactionAmount" placeholder="Введите сумму пополнения">
+            <input name="transactionAmount" placeholder="Введите сумму пополнения" pattern="\d+.?\d+">
         </div>
         <div>
-            <input name="giverAccountID" th:value="${BankAccount.getId()}" type="hidden">
+            <input name="giverAccountID" type="hidden">
         </div>
         <div>
             <input name="receiverAccountID" th:value="${BankAccount.getId()}" type="hidden">
@@ -37,7 +37,7 @@
 
     <form action="/transaction" method="post">
         <div>
-            <input name="transactionAmount" placeholder="Введите сумму перевода">
+            <input name="transactionAmount" placeholder="Введите сумму перевода" pattern="\d+.?\d+">
         </div>
         <div>
             <input name="giverAccountID" th:value="${BankAccount.getId()}" type="hidden">
@@ -60,13 +60,13 @@
 
     <form action="/transaction" method="post">
         <div>
-            <input name="transactionAmount" placeholder="Введите сумму снятия">
+            <input name="transactionAmount" placeholder="Введите сумму снятия" pattern="\d+.?\d+">
         </div>
         <div>
             <input name="giverAccountID" th:value="${BankAccount.getId()}" type="hidden">
         </div>
         <div>
-            <input name="receiverAccountID" th:value="${BankAccount.getId()}" type="hidden">
+            <input name="receiverAccountID" type="hidden">
         </div>
         <div>
             <input name="transactionType" value="withd" type="hidden">
@@ -76,7 +76,8 @@
         </div>
     </form>
 </div>
-<form th:action="'/account?id='+${BankAccount.getId()}">
+<form action="/account">
+    <input name="id" th:value="${BankAccount.getId()}" type="hidden">
     <button>Назад</button>
 </form>
 </body>

@@ -17,8 +17,7 @@ public class AccountService {
 
     public boolean createAccount(BankUser user, String currency) {
         BankAccount account = getNewAccount(user, currency);
-        user.getAccounts().add(account);
-        userService.saveBankUser(user);
+        accountsRepository.save(account);
         return true;
     }
 

@@ -23,8 +23,11 @@ public class TransactionService {
 
     private UsersRepository usersRepository;
 
-    public void makeTransaction(BankTransactionDTO transactionDTO) {
+    private ConvertorService convertorService;
 
+    public void makeTransaction(BankTransactionDTO transactionDTO) {
+        System.out.println(transactionDTO.getReceiverAccountID());
+        System.out.println(transactionDTO.getGiverAccountID());
         String transactionType = transactionDTO.getTransactionType();
         BankAccount giver = null;
         BankAccount receiver = null;
@@ -38,15 +41,13 @@ public class TransactionService {
                         transactionDTO.getTransactionAmount());
                 break;
             case "add":
-                giver = accountsRepository.findBankAccountById(transactionDTO.getGiverAccountID());
-                receiver = giver;
+                receiver = accountsRepository.findBankAccountById(transactionDTO.getReceiverAccountID());
                 makeAdding(
-                        giver,
+                        receiver,
                         transactionDTO.getTransactionAmount());
                 break;
             case "withd":
                 giver = accountsRepository.findBankAccountById(transactionDTO.getGiverAccountID());
-                receiver = giver;
                 makeWithdrawal(
                         giver,
                         transactionDTO.getTransactionAmount());
@@ -54,21 +55,22 @@ public class TransactionService {
             default:
         }
 
-        if (giver == null && receiver == null) throw new NullPointerException("Transaction must not be null");
-
         BankTransaction transaction = createTransaction(receiver, giver, transactionDTO.getTransactionAmount());
-        if (giver == receiver) {
+        if (!(giver == null))
             transaction.getTransactionParticipants().add(giver);
-        } else {
-            transaction.getTransactionParticipants().add(giver);
+
+        if (!(receiver == null))
             transaction.getTransactionParticipants().add(receiver);
-        }
+
         transactionsRepository.save(transaction);
     }
 
-    private void makeTransfer(BankAccount giver, BankAccount receiver, double amount) {
-        makeWithdrawal(giver, amount);
-        makeAdding(receiver, amount);
+    private void makeTransfer(BankAccount giver, BankAccount receiver, double withdrawAmount) {
+        makeWithdrawal(giver, withdrawAmount);
+        double enrollAmount = withdrawAmount;
+        if (!giver.getCurrencyCode().equals(receiver.getCurrencyCode()))
+            enrollAmount = convertorService.getConvertedValue(enrollAmount, giver.getCurrencyCode(), receiver.getCurrencyCode());
+        makeAdding(receiver, enrollAmount);
     }
 
     private void makeWithdrawal(BankAccount account, double amount) {
@@ -82,10 +84,10 @@ public class TransactionService {
     public BankTransaction createTransaction(BankAccount receiver, BankAccount giver, double amount) {
 
         return new BankTransaction(
-                receiver.getUser().getId(),
-                giver.getUser().getId(),
-                receiver.getId(),
-                giver.getId(),
+                receiver == null ? null : receiver.getUser().getId(),
+                giver == null ? null : giver.getUser().getId(),
+                receiver == null ? null : receiver.getId(),
+                giver == null ? null : giver.getId(),
                 getTransactionDateTimeString(),
                 amount
         );

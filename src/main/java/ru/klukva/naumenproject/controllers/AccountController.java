@@ -33,7 +33,7 @@ public class AccountController {
 
     @GetMapping("/account")
     public String getAccountInfo(@AuthenticationPrincipal BankUser user, Long id, Model model) {
-        if (accountService.existsBankAccountByIdAndUser(id, user))
+        if (!accountService.existsBankAccountByIdAndUser(id, user))
             return "redirect:/home";
 
         BankAccount account = accountService.getAccountById(id);
@@ -47,7 +47,7 @@ public class AccountController {
                                      String transactionType,
                                      Model model) {
 
-        if (accountService.existsBankAccountByIdAndUser(id, user))
+        if (!accountService.existsBankAccountByIdAndUser(id, user))
             return "redirect:/home";
 
         BankAccount account = accountService.getAccountById(id);
@@ -59,12 +59,14 @@ public class AccountController {
     @PostMapping("/transaction")
     public String makeTransaction(BankTransactionDTO transactionDTO) {
         transactionService.makeTransaction(transactionDTO);
-        return "redirect:/account?id=" + transactionDTO.getGiverAccountID();
+        return "redirect:/account?id=" + (transactionDTO.getGiverAccountID() == null
+                ? transactionDTO.getReceiverAccountID()
+                : transactionDTO.getGiverAccountID());
     }
 
     @GetMapping("/get-transaction-history")
     public String getTransactionHistory(@AuthenticationPrincipal BankUser user, Long id, Model model) {
-        if (accountService.existsBankAccountByIdAndUser(id, user))
+        if (!accountService.existsBankAccountByIdAndUser(id, user))
             return "redirect:/home";
         
         BankAccount account = accountService.getAccountById(id);
