@@ -9,18 +9,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import ru.klukva.naumenproject.dto.BankTransactionDTO;
 import ru.klukva.naumenproject.models.BankAccount;
 import ru.klukva.naumenproject.models.BankUser;
-import ru.klukva.naumenproject.repositories.AccountsRepository;
 import ru.klukva.naumenproject.services.AccountService;
 import ru.klukva.naumenproject.services.TransactionService;
-import ru.klukva.naumenproject.services.UserService;
 
 @Controller
 @AllArgsConstructor
 public class AccountController {
-
-    private final UserService userService;
-
-    private final AccountsRepository accountsRepository;
 
     private final AccountService accountService;
 
@@ -39,13 +33,12 @@ public class AccountController {
 
     @GetMapping("/account")
     public String getAccountInfo(@AuthenticationPrincipal BankUser user, Long id, Model model) {
-        if (accountService.existsBankAccountByIdAndUser(id, user)) {
-            BankAccount account = accountService.getAccountById(id);
-            model.addAttribute("BankAccount", account);
-            return "account_info_page";
-        }
+        if (accountService.existsBankAccountByIdAndUser(id, user))
+            return "redirect:/home";
 
-        return "redirect:/home";
+        BankAccount account = accountService.getAccountById(id);
+        model.addAttribute("BankAccount", account);
+        return "account_info_page";
     }
 
     @GetMapping("/transaction")
@@ -53,14 +46,14 @@ public class AccountController {
                                      Long id,
                                      String transactionType,
                                      Model model) {
-        if (accountService.existsBankAccountByIdAndUser(id, user)) {
-            BankAccount account = accountService.getAccountById(id);
-            model.addAttribute("BankAccount", account);
-            model.addAttribute("transactionType", transactionType);
-            return "transaction_account_page";
-        }
 
-        return "redirect:/home";
+        if (accountService.existsBankAccountByIdAndUser(id, user))
+            return "redirect:/home";
+
+        BankAccount account = accountService.getAccountById(id);
+        model.addAttribute("BankAccount", account);
+        model.addAttribute("transactionType", transactionType);
+        return "transaction_account_page";
     }
 
     @PostMapping("/transaction")
@@ -69,18 +62,14 @@ public class AccountController {
         return "redirect:/account?id=" + transactionDTO.getGiverAccountID();
     }
 
-    @PostMapping("/account-adding")
-    public String topUpAccount(@AuthenticationPrincipal BankUser user, BankTransactionDTO transactionDTO, Model model) {
-        System.out.println("Отправитель : " + transactionDTO.getGiverAccountID());
-        System.out.println("Получатель : " + transactionDTO.getReceiverAccountID());
-        System.out.println("Сумма пополнения : " + transactionDTO.getTransactionAmount());
-
-        BankAccount account = accountsRepository.findBankAccountById(transactionDTO.getReceiverAccountID());
-        account.setBalance(account.getBalance() + transactionDTO.getTransactionAmount());
-        accountsRepository.save(account);
-
-        return "redirect:/account?id=" + transactionDTO.getGiverAccountID();
+    @GetMapping("/get-transaction-history")
+    public String getTransactionHistory(@AuthenticationPrincipal BankUser user, Long id, Model model) {
+        if (accountService.existsBankAccountByIdAndUser(id, user))
+            return "redirect:/home";
+        
+        BankAccount account = accountService.getAccountById(id);
+        model.addAttribute("BankAccount", account);
+        return "transactions_history_page";
     }
-
 }
 

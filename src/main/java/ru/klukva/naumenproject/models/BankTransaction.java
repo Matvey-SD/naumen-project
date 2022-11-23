@@ -3,18 +3,17 @@ package ru.klukva.naumenproject.models;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Entity
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 public class BankTransaction implements Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,7 +38,7 @@ public class BankTransaction implements Transaction {
             joinColumns = {@JoinColumn(name = "transaction_id")},
             inverseJoinColumns = {@JoinColumn(name = "account_id")}
     )
-    private List<BankAccount> transactionParticipants = new ArrayList<>();
+    private final List<BankAccount> transactionParticipants = new ArrayList<>();
 
     public BankTransaction(Long receiverID,
                            Long giverID,

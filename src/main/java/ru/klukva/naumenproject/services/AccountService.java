@@ -6,6 +6,8 @@ import ru.klukva.naumenproject.models.BankAccount;
 import ru.klukva.naumenproject.models.BankUser;
 import ru.klukva.naumenproject.repositories.AccountsRepository;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class AccountService {
@@ -17,20 +19,24 @@ public class AccountService {
         BankAccount account = getNewAccount(user, currency);
         user.getAccounts().add(account);
         userService.saveBankUser(user);
-        userService.resynchronize(user);
         return true;
     }
 
-    public boolean existsBankAccountByIdAndUser(Long id, BankUser user) {
-        return accountsRepository.existsBankAccountByIdAndUser(id, user);
+    public BankAccount getNewAccount(BankUser user, String currency) {
+        return new BankAccount(0D, currency, user);
+    }
+
+    public List<BankAccount> getAllBankUserAccounts(BankUser user) {
+        return accountsRepository.findAllByUser(user);
     }
 
     public BankAccount getAccountById(Long id) {
         return accountsRepository.getById(id);
     }
 
-    public BankAccount getNewAccount(BankUser user, String currency) {
-        return new BankAccount(0D, currency, user);
+    public boolean existsBankAccountByIdAndUser(Long id, BankUser user) {
+        return accountsRepository.existsBankAccountByIdAndUser(id, user);
     }
+
 
 }

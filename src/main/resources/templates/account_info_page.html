@@ -11,6 +11,10 @@
 <h3 th:text="'НОМЕР СЧЕТА: ' + ${BankAccount.getId()}"></h3>
 <h3 th:text="'ВАЛЮТА СЧЕТА: ' + ${BankAccount.getCurrencyCode()}"></h3>
 <h3 th:text="'БАЛАНС: ' + ${BankAccount.getBalance()}"></h3>
+<form action="/get-transaction-history" method="get">
+    <input name="id" th:value="${BankAccount.getId()}" type="hidden">
+    <button>Показать историю операций счёта</button>
+</form>
 <form action="/transaction" method="get">
     <input name="id" th:value="${BankAccount.getId()}" type="hidden">
     <input name="transactionType" value="add" type="hidden">

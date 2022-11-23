@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Transactions history</title>
+</head>
+<body>
+<div th:if="${BankAccount.getTransactionsHistory().isEmpty()}">
+    <h3>По данному счету не совершено операций</h3>
+</div>
+<p></p>
+<div th:unless="${BankAccount.getTransactionsHistory().isEmpty()}">
+    <div th:each="transaction : ${BankAccount.getTransactionsHistory()}">
+        <p th:text="'ID получателя: ' + ${transaction.getReceiverID}"></p>
+        <p th:text="'ID отправителя: ' + ${transaction.getGiverID}"></p>
+        <p th:text="'Номер счета получателя: ' + ${transaction.getReceiverAccountID}"></p>
+        <p th:text="'Номер счета отправителя: ' + ${transaction.getGiverAccountID}"></p>
+        <p th:text="'Время операции: ' + ${transaction.getTransactionDateTime}"></p>
+        <p th:text="'Сумма: ' + ${transaction.getTransactionAmount}"></p>
+    </div>
+</div>
+<p></p>
+<form th:action="'/account?id='+${BankAccount.getId()}">
+    <button>Назад</button>
+</form>
+</body>
+</html>

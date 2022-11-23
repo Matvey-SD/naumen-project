@@ -11,12 +11,12 @@
 <h3 th:text="'ФИО: ' + ${user.getFullName()}"></h3>
 <h3 th:text="'Почта: ' + ${user.getEmail()}"></h3>
 <h3 th:text="'Телефон: ' + ${user.getPhoneNumber()}"></h3>
-<h3 th:each="account : ${user.getAccounts()}"></h3>
-<div th:if="${user.getAccounts().isEmpty()}">
+<h3 th:each="account : ${userAccounts}"></h3>
+<div th:if="${userAccounts.isEmpty()}">
     <div>У вас не счетов!:(</div>
 </div>
-<div th:unless="${user.getAccounts().isEmpty()}">
-    <div th:each="account : ${user.getAccounts()}">
+<div th:unless="${userAccounts.isEmpty()}">
+    <div th:each="account : ${userAccounts}">
         <a th:href="'/account?id=' + ${account.getId()}"><div th:text="'Счет №' + ${account.getId()} + ' Баланс: ' + ${account.getBalance()} + ' ' + ${account.getCurrencyCode()}"></div></a>
     </div>
 </div>

@@ -7,8 +7,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.klukva.naumenproject.models.BankAccount;
 import ru.klukva.naumenproject.models.BankUser;
 import ru.klukva.naumenproject.repositories.UsersRepository;
+
+import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -36,29 +40,14 @@ public class UserService implements UserDetailsService {
     public BankUser getBankUserByID(Long id) {
         return usersRepository.findBankUserById(id);
     }
+
     public void addUser(BankUser user) {
         user.setHashPassword(passwordEncoder.encode(user.getDecodePassword()));
-        usersRepository.save(user);
+        saveBankUser(user);
     }
 
     public void saveBankUser(BankUser user) {
         usersRepository.save(user);
-    }
-
-    public BankUser synchronize(BankUser user) {
-
-        if (user == null) throw new NullPointerException("User can't be null");
-
-        if (!user.isSynchronized()) {
-            user = getBankUserByID(user.getId());
-            user.setSynchronized(true);
-        }
-
-        return user;
-    }
-
-    public static void resynchronize(BankUser user) {
-        user.setSynchronized(false);
     }
 }
 

@@ -14,30 +14,39 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-@AllArgsConstructor
-@NoArgsConstructor
+
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class BankUser implements User, UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String firstName;
+
     private String lastName;
+
     private String patronymic;
+
     private String email;
+
     private String phoneNumber;
+
     private String hashPassword;
+
     @Transient
     private String password;
+
     @Transient
     private boolean isSynchronized;
 
     @OneToMany(
             cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             mappedBy = "user"
     )
     private final List<BankAccount> accounts = new ArrayList<>();

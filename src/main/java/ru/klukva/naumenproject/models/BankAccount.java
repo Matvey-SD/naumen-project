@@ -39,12 +39,11 @@ public class BankAccount implements Account {
     @JoinColumn(name = "user_id")
     private BankUser user;
 
-    @ManyToMany( fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinTable(
             name = "account_transactions",
             joinColumns = {@JoinColumn(name = "account_id")},
             inverseJoinColumns = {@JoinColumn(name = "transaction_id")}
     )
     private final List<BankTransaction> transactionsHistory = new ArrayList<>();
-
 }
