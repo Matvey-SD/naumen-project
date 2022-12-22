@@ -8,17 +8,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import ru.klukva.naumenproject.dto.BankTransactionDTO;
 import ru.klukva.naumenproject.models.BankAccount;
+import ru.klukva.naumenproject.models.BankTransaction;
 import ru.klukva.naumenproject.models.BankUser;
 import ru.klukva.naumenproject.services.AccountService;
 import ru.klukva.naumenproject.services.TransactionService;
+import ru.klukva.naumenproject.services.UserService;
 
 @Controller
 @AllArgsConstructor
 public class AccountController {
 
     private final AccountService accountService;
-
     private final TransactionService transactionService;
+    private final UserService userService;
+
 
     @GetMapping("/account-registration")
     public String getAccountRegistration() {
@@ -72,6 +75,32 @@ public class AccountController {
         BankAccount account = accountService.getAccountById(id);
         model.addAttribute("BankAccount", account);
         return "transactions_history_page";
+    }
+
+    @GetMapping("/get-transaction-info")
+    public String getTransactionInfo(@AuthenticationPrincipal BankUser user, Long id, Long accountId, Model model) {
+        if (!transactionService.existsTransactionByIdAndUser(id, user))
+            return "redirect:/home";
+        BankTransaction transaction = transactionService.getTransactionById(id);
+        model.addAttribute("transaction", transaction);
+
+        BankUser otherUser = user;
+        BankAccount account = accountService.getAccountById(accountId);
+        BankAccount otherAccount = account;
+        if (transaction.getGiverAccountID() != null && !transaction.getGiverAccountID().equals(account.getId())) {
+            otherUser = userService.getBankUserByID(transaction.getGiverID());
+            otherAccount = accountService.getAccountById(transaction.getGiverAccountID());
+        }
+        if (transaction.getReceiverAccountID() != null && !transaction.getReceiverAccountID().equals(account.getId())) {
+            otherUser = userService.getBankUserByID(transaction.getReceiverID());
+            otherAccount = accountService.getAccountById(transaction.getReceiverAccountID());
+        }
+
+        model.addAttribute("user", user);
+        model.addAttribute("otherUser", otherUser);
+        model.addAttribute("bankAccount", account);
+        model.addAttribute("otherBankAccount", otherAccount);
+        return "/trans_info";
     }
 }
 

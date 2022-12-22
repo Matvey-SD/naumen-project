@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.klukva.naumenproject.dto.BankTransactionDTO;
 import ru.klukva.naumenproject.models.BankAccount;
 import ru.klukva.naumenproject.models.BankTransaction;
+import ru.klukva.naumenproject.models.BankUser;
 import ru.klukva.naumenproject.repositories.AccountsRepository;
 import ru.klukva.naumenproject.repositories.TransactionsRepository;
 import ru.klukva.naumenproject.repositories.UsersRepository;
@@ -31,14 +32,18 @@ public class TransactionService {
         String transactionType = transactionDTO.getTransactionType();
         BankAccount giver = null;
         BankAccount receiver = null;
+        double enrollAmount = transactionDTO.getTransactionAmount();
         switch (transactionType) {
             case "transf":
                 giver = accountsRepository.findBankAccountById(transactionDTO.getGiverAccountID());
                 receiver = accountsRepository.findBankAccountById(transactionDTO.getReceiverAccountID());
+                if (!giver.getCurrencyCode().equals(receiver.getCurrencyCode()))
+                    enrollAmount = convertorService.getConvertedValue(enrollAmount, giver.getCurrencyCode(), receiver.getCurrencyCode());
                 makeTransfer(
                         giver,
                         receiver,
-                        transactionDTO.getTransactionAmount());
+                        transactionDTO.getTransactionAmount(),
+                        enrollAmount);
                 break;
             case "add":
                 receiver = accountsRepository.findBankAccountById(transactionDTO.getReceiverAccountID());
@@ -55,7 +60,7 @@ public class TransactionService {
             default:
         }
 
-        BankTransaction transaction = createTransaction(receiver, giver, transactionDTO.getTransactionAmount());
+        BankTransaction transaction = createTransaction(receiver, giver, transactionDTO.getTransactionAmount(), enrollAmount);
         if (!(giver == null))
             transaction.getTransactionParticipants().add(giver);
 
@@ -65,11 +70,8 @@ public class TransactionService {
         transactionsRepository.save(transaction);
     }
 
-    private void makeTransfer(BankAccount giver, BankAccount receiver, double withdrawAmount) {
+    private void makeTransfer(BankAccount giver, BankAccount receiver, double withdrawAmount, double enrollAmount) {
         makeWithdrawal(giver, withdrawAmount);
-        double enrollAmount = withdrawAmount;
-        if (!giver.getCurrencyCode().equals(receiver.getCurrencyCode()))
-            enrollAmount = convertorService.getConvertedValue(enrollAmount, giver.getCurrencyCode(), receiver.getCurrencyCode());
         makeAdding(receiver, enrollAmount);
     }
 
@@ -81,7 +83,7 @@ public class TransactionService {
         account.setBalance(account.getBalance() + amount);
     }
 
-    public BankTransaction createTransaction(BankAccount receiver, BankAccount giver, double amount) {
+    public BankTransaction createTransaction(BankAccount receiver, BankAccount giver, double sendAmount, double receiveAmount) {
 
         return new BankTransaction(
                 receiver == null ? null : receiver.getUser().getId(),
@@ -89,7 +91,8 @@ public class TransactionService {
                 receiver == null ? null : receiver.getId(),
                 giver == null ? null : giver.getId(),
                 getTransactionDateTimeString(),
-                amount
+                sendAmount,
+                receiveAmount
         );
     }
 
@@ -99,26 +102,11 @@ public class TransactionService {
         return DateTimeFormatter.ofPattern("uuuu/MM/dd HH:mm:ss").format(transactionDateTime);
     }
 
-
-   /* public boolean tryIncreaseBalance(double value) {
-        double tempBalance = balance + value;
-
-        if (BALANCE_LIMIT < tempBalance) {
-            return false;
-        }
-        balance = tempBalance;
-        return true;
+    public boolean existsTransactionByIdAndUser(Long id, BankUser user) {
+        return transactionsRepository.existsByGiverIDAndIdOrReceiverIDAndId(user.getId(), id, user.getId(), id);
     }
 
-    public boolean tryDecreaseBalance(double value) {
-        double tempBalance = balance - value;
-
-        if (tempBalance < 0) {
-            return false;
-        }
-
-        balance = tempBalance;
-        return true;
-    }*/
-
+    public BankTransaction getTransactionById(Long id) {
+        return transactionsRepository.getBankTransactionById(id);
+    }
 }

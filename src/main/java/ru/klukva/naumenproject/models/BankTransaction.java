@@ -29,7 +29,9 @@ public class BankTransaction implements Transaction {
 
     private String transactionDateTime;
 
-    private double transactionAmount;
+    private double transactionSendAmount;
+
+    private double transactionReceiveAmount;
 
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -45,14 +47,14 @@ public class BankTransaction implements Transaction {
                            Long receiverAccountID,
                            Long giverAccountID,
                            String transactionDateTimeString,
-                           double transactionAmount) {
+                           double transactionSendAmount, double transactionReceiveAmount) {
 
         this.receiverID = receiverID;
         this.giverID = giverID;
         this.receiverAccountID = receiverAccountID;
         this.giverAccountID = giverAccountID;
         this.transactionDateTime = transactionDateTimeString;
-        this.transactionAmount = transactionAmount;
-
+        this.transactionSendAmount = transactionSendAmount;
+        this.transactionReceiveAmount = transactionReceiveAmount;
     }
 }

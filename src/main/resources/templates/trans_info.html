@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Transaction info</title>
+    <style>
+        .inc {
+            color: green;
+        }
+        .dec {
+            color: firebrick;
+        }
+    </style>
+</head>
+<body>
+    <h1 th:text="'Операция №' + ${transaction.getId()}"></h1>
+    <h3 th:text="'Время операции: ' + ${transaction.getTransactionDateTime()}"></h3>
+    <div th:if="${transaction.getGiverID() != null}">
+        <div th:if="${transaction.getGiverID() == user.getId()}">
+            <h3 th:text="'Отправитель: ' + ${user.getFullName()}"></h3>
+            <h3 th:text="'Счёт снятия: ' + ${transaction.getGiverAccountID()}"></h3>
+        </div>
+        <div th:if="${transaction.getGiverID() == otherUser.getId() && otherUser.getId() != user.getId()}">
+            <h3 th:text="'Отправитель: ' + ${otherUser.getFullName()}"></h3>
+            <h3 th:text="'Счёт снятия: ' + ${transaction.getGiverAccountID()}"></h3>
+        </div>
+        <div th:if="${transaction.getGiverAccountID() == bankAccount.getId()}">
+            <h3 class="dec" th:text="'Сумма снятия: ' + ${transaction.getTransactionSendAmount()}  + ' ' + ${bankAccount.getCurrencyCode()}"></h3>
+        </div>
+        <div th:unless="${transaction.getGiverAccountID() == bankAccount.getId()}">
+            <h3 class="dec" th:text="'Сумма снятия: ' + ${transaction.getTransactionSendAmount() }  + ' ' + ${otherBankAccount.getCurrencyCode()}"></h3>
+        </div>
+    </div>
+    <div th:if="${transaction.getReceiverID() != null}">
+        <div th:if="${transaction.getReceiverID() == user.getId()}">
+            <h3 th:text="'Получатель: ' + ${user.getFullName()}"></h3>
+            <h3 th:text="'Счёт получения: ' + ${transaction.getReceiverAccountID()}"></h3>
+        </div>
+        <div th:if="${transaction.getReceiverID() == otherUser.getId() && otherUser.getId() != user.getId()}">
+            <h3 th:text="'Получатель: ' + ${otherUser.getFullName()}"></h3>
+            <h3 th:text="'Счёт получения: ' + ${transaction.getReceiverAccountID()}"></h3>
+        </div>
+        <div th:if="${transaction.getReceiverAccountID() == bankAccount.getId()}">
+            <h3 class="inc" th:text="'Сумма пополнения: ' + ${transaction.getTransactionReceiveAmount()}  + ' ' + ${bankAccount.getCurrencyCode()}"></h3>
+        </div>
+        <div th:unless="${transaction.getReceiverAccountID() == bankAccount.getId()}">
+            <h3 class="inc" th:text="'Сумма пополнения: ' + ${transaction.getTransactionReceiveAmount() }  + ' ' + ${otherBankAccount.getCurrencyCode()}"></h3>
+        </div>
+    </div>
+    <form action="/get-transaction-history" method="get">
+        <input name="id" th:value="${bankAccount.getId()}" type="hidden">
+        <button>Назад</button>
+    </form>
+</body>
+</html>

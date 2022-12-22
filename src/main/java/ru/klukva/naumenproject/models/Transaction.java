@@ -6,5 +6,6 @@ public interface Transaction {
     public Long getReceiverAccountID();
     public Long getGiverAccountID();
     public String getTransactionDateTime();
-    public double getTransactionAmount();
+    public double getTransactionSendAmount();
+    public double getTransactionReceiveAmount();
 }

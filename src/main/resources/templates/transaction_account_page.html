@@ -14,7 +14,7 @@
     <h3>Введите сумму на которую хотите пополнить счет:</h3>
     <form action="/transaction" method="post">
         <div>
-            <input name="transactionAmount" placeholder="Введите сумму пополнения" pattern="\d+.?\d+">
+            <input name="transactionAmount" placeholder="Введите сумму пополнения" pattern="\d+.?\d*">
         </div>
         <div>
             <input name="giverAccountID" type="hidden">
@@ -37,7 +37,7 @@
 
     <form action="/transaction" method="post">
         <div>
-            <input name="transactionAmount" placeholder="Введите сумму перевода" pattern="\d+.?\d+">
+            <input name="transactionAmount" placeholder="Введите сумму перевода" pattern="\d+.?\d*">
         </div>
         <div>
             <input name="giverAccountID" th:value="${BankAccount.getId()}" type="hidden">
@@ -60,7 +60,7 @@
 
     <form action="/transaction" method="post">
         <div>
-            <input name="transactionAmount" placeholder="Введите сумму снятия" pattern="\d+.?\d+">
+            <input name="transactionAmount" placeholder="Введите сумму снятия" pattern="\d+.?\d*">
         </div>
         <div>
             <input name="giverAccountID" th:value="${BankAccount.getId()}" type="hidden">

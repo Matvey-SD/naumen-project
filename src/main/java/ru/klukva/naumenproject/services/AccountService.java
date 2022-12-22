@@ -36,6 +36,4 @@ public class AccountService {
     public boolean existsBankAccountByIdAndUser(Long id, BankUser user) {
         return accountsRepository.existsBankAccountByIdAndUser(id, user);
     }
-
-
 }

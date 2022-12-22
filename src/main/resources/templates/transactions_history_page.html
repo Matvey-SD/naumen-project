@@ -6,6 +6,17 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Transactions history</title>
+    <style>
+        #trans-button {
+            background: transparent;
+            text-align: center;
+            margin-bottom: 5px;
+            border-width: 3px;
+        }
+        #trans-button:hover {
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 <div th:if="${BankAccount.getTransactionsHistory().isEmpty()}">
@@ -14,17 +25,21 @@
 <p></p>
 <div th:unless="${BankAccount.getTransactionsHistory().isEmpty()}">
     <div th:each="transaction : ${BankAccount.getTransactionsHistory()}">
-        <h2 th:text="'Транзакция №' + ${transaction.getId()}"></h2>
-        <div th:if="${transaction.getReceiverID != null}">
-            <p th:text="'Получатель: ' + ${transaction.getReceiverID}"></p>
-            <p th:text="'Номер счета получателя: ' + ${transaction.getReceiverAccountID}"></p>
+        <div style="width: 20%;">
+            <form action="/get-transaction-info" method="get">
+                <input name="id" th:value="${transaction.getId()}" type="hidden">
+                <input name="accountId" th:value="${BankAccount.getId()}" type="hidden">
+                <button id="trans-button">
+                    <h3 th:text="'Транзакция №' + ${transaction.getId()}"></h3>
+                    <div th:if="${transaction.getReceiverAccountID != null && transaction.getReceiverAccountID == BankAccount.getId()}">
+                        <p th:text="'+' + ${transaction.getTransactionReceiveAmount}" style="color: green; font-weight: bold; font-size: large"></p>
+                    </div>
+                    <div th:if="${transaction.getGiverAccountID != null &&  transaction.getGiverAccountID == BankAccount.getId()}">
+                        <p th:text="'-' + ${transaction.getTransactionSendAmount}" style="color: firebrick; font-weight: bold; font-size: large"></p>
+                    </div>
+                </button>
+            </form>
         </div>
-        <div th:if="${transaction.getGiverID != null}">
-            <p th:text="'Отправитель: ' + ${transaction.getGiverID}"></p>
-            <p th:text="'Номер счета отправителя: ' + ${transaction.getGiverAccountID}"></p>
-        </div>
-        <p th:text="'Время операции: ' + ${transaction.getTransactionDateTime}"></p>
-        <p th:text="'Сумма: ' + ${transaction.getTransactionAmount}"></p>
     </div>
 </div>
 <p></p>
