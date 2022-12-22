@@ -16,8 +16,6 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 public class BankAccount implements Account {
-    @Transient
-    private static final double BALANCE_LIMIT = 1_000_000d;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
